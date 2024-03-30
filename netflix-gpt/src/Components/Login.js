@@ -1,8 +1,22 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Header from './Header'
-
+import { checkValidatedata } from '../Utils/Vaildation';
 const Login = () => {
     const [isSignForm, setIsSignForm] =useState(true);
+    const [errorMessage , setErrorMessage] = useState(null);
+    const name= useRef(null);
+    const email = useRef(null);
+    const password = useRef(null);
+    const handleButtonClick =() =>{
+      //Validate the form data
+      // checkValidatedata(email ,password)
+      // console.log(email.current.value);
+      // console.log(password.current.calue);
+
+       const message = checkValidatedata(email.current.value, password.current.value);
+      setErrorMessage(message);
+   
+    }
     const toggleSigninForm=()=>{
          setIsSignForm(!isSignForm);
     }
@@ -16,26 +30,34 @@ const Login = () => {
         alt="Bg-logo"
         /> 
         </div>
-     <form className=" w-3/12 absolute p-12 bg-black text-white my-36 mx-auto right-0 left-0 backdrop-opacity-85">
+     <form  
+     onSubmit={(e) =>e.preventDefault() }
+     className=" w-3/12 absolute p-12 bg-black text-white my-36 mx-auto right-0 left-0 backdrop-opacity-85">
        <h1 
        className="font-bold text-3xl py-4">
 
-        {isSignForm ? "Sign In" : "Sign Up"}
+        {isSignForm ? "Sign In" : "Sign Up" }
         </h1>
-        <input type="text" 
+        <input
+        ref={email}
+         type="text" 
         placeholder="Email Address"
          className="p-4 my-4 w-full bg-gray-600"/>
       {!isSignForm && (
-       <input type="text" 
+       <input
+       ref={name}
+       type="text" 
         placeholder="Full Name"
          className="p-4 my-4 w-full bg-gray-600"/>)}
         
-        <input type="password"
+        <input
+        ref={password}
+         type="password"
          placeholder="Password"
           className="p-4 my-4 w-full  bg-gray-600"/>
-        
+        <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
         <button
-         className="p-4 my-6 bg-red-700 rounded-lg">
+         className="p-4 my-6 bg-red-700 rounded-lg" onClick={handleButtonClick}>
         {isSignForm ? "Sign In" : "Sign Up"}
             </button>
         <p 
@@ -50,3 +72,8 @@ const Login = () => {
 }
 
 export default Login
+
+
+
+
+
