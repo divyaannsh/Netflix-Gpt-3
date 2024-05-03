@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
 import Header from './Header'
 import { checkValidatedata } from '../utils/validate';
+import {  createUserWithEmailAndPassword } from "firebase/auth";
+import {auth} from "../utils/firebase"
 const Login = () => {
     const [isSignForm, setIsSignForm] =useState(true);
     const [errorMessage , setErrorMessage] = useState(null);
@@ -15,6 +17,34 @@ const Login = () => {
 
        const message = checkValidatedata(email.current.value, password.current.value);
       setErrorMessage(message);
+
+         if(message) return;
+             //sign in/sign up
+
+          if(!setIsSignForm){
+            //signinlgic
+            createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+            .then((userCredential) => {
+             
+              const user = userCredential.user;
+              console.log(user)
+              // ...
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              setErrorMessage(errorCode + "-" + errorMessage);
+              // ..
+            });
+            
+          }
+         
+          else{
+            //sign Inlogic
+
+
+          }
+         
 
     }
     const toggleSigninForm=()=>{
